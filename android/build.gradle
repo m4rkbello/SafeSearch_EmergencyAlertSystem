@@ -23,21 +23,21 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "34.0.0"
-        minSdkVersion = 24
-        compileSdkVersion = 34
+        // Define these required properties
+        compileSdkVersion = 34  // Or your preferred SDK version
+        minSdkVersion = 23
         targetSdkVersion = 34
-        kotlinVersion = "1.9.0"
+        ndkVersion = "25.1.8937393"  // Add this line
+        
+        // Firebase versions
+        firebaseMessagingVersion = "23.0.0"
     }
-    repositories {
-        google()
-        mavenCentral()
-    }
+    
     dependencies {
-        classpath('com.android.tools.build:gradle:8.1.1')
-        classpath('com.facebook.react:react-native-gradle-plugin')
-        classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
-        classpath('com.google.gms:google-services:4.4.0')
+        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("com.google.gms:google-services:4.3.15")
+        
     }
 }
 

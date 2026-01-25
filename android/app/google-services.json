@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1017028642780",
+    "project_id": "safesearch-1ef5e",
+    "storage_bucket": "safesearch-1ef5e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017028642780:android:e004dd625374c0cadd3119",
+        "android_client_info": {
+          "package_name": "com.safesearch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAibiU-WTClDf9RJ__oWfUiFykgboC33c8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

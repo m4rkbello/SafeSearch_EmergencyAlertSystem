@@ -1,45 +1,71 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect } from 'react';
+import { LogBox, PermissionsAndroid, Platform, Alert } from 'react-native';
+import AppNavigator from './src/navigation/AppNavigation';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+// Ignore specific warnings
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+  useEffect(() => {
+    requestPermissions();
+  }, []);
 
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
+  const requestPermissions = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          PermissionsAndroid.PERMISSIONS.SEND_SMS,
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+          PermissionsAndroid.PERMISSIONS.CALL_PHONE,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ]);
+        
+        // Check individual permissions and show alerts if denied
+        if (granted['android.permission.ACCESS_FINE_LOCATION'] !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert(
+            'Location Permission Required',
+            'This app needs location permission to send your GPS location during emergencies.',
+            [
+              { text: 'OK' },
+              {
+                text: 'Open Settings',
+                onPress: () => {
+                  if (Platform.OS === 'android') {
+                    // Open app settings
+                  }
+                }
+              }
+            ]
+          );
+        }
+        
+        if (granted['android.permission.SEND_SMS'] !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert(
+            'SMS Permission Required',
+            'This app needs SMS permission to send emergency messages.',
+            [{ text: 'OK' }]
+          );
+        }
 
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
+        if (granted['android.permission.RECORD_AUDIO'] !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert(
+            'Microphone Permission Required',
+            'This app needs microphone permission to record audio emergency messages.',
+            [{ text: 'OK' }]
+          );
+        }
+      } catch (err) {
+        console.warn('Permission request error:', err);
+      }
+    }
+  };
 
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+  return <AppNavigator />;
+};
 
 export default App;

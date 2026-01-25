@@ -1,154 +1,184 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {STORAGE_KEYS} from '../utils/constants';
 
 class StorageService {
-  async saveContactsToJSON(contacts) {
-    try {
-      const jsonData = JSON.stringify(contacts, null, 2);
-      await AsyncStorage.setItem(STORAGE_KEYS.CONTACTS, jsonData);
-      console.log('✅ Contacts saved to JSON');
-      return true;
-    } catch (error) {
-      console.error('❌ Save error:', error);
-      return false;
-    }
+  constructor() {
+    this.CONTACTS_KEY = '@safesearch_contacts';
   }
 
+  // Get all contacts from AsyncStorage
   async getContactsFromJSON() {
     try {
-      const jsonData = await AsyncStorage.getItem(STORAGE_KEYS.CONTACTS);
-      if (jsonData) {
-        return JSON.parse(jsonData);
-      }
-      return [];
+      const contactsJSON = await AsyncStorage.getItem(this.CONTACTS_KEY);
+      return contactsJSON ? JSON.parse(contactsJSON) : [];
     } catch (error) {
-      console.error('❌ Load error:', error);
+      console.error('Error loading contacts:', error);
       return [];
     }
   }
 
+  // Save all contacts to AsyncStorage
+  async saveContacts(contacts) {
+    try {
+      await AsyncStorage.setItem(this.CONTACTS_KEY, JSON.stringify(contacts));
+      return true;
+    } catch (error) {
+      console.error('Error saving contacts:', error);
+      throw error;
+    }
+  }
+
+  // Add a new contact
   async addContact(contactData) {
     try {
       const contacts = await this.getContactsFromJSON();
       const newContact = {
         id: Date.now().toString(),
-        firstName: contactData.firstName,
-        middleName: contactData.middleName || '',
-        lastName: contactData.lastName,
-        contactNo: contactData.contactNo,
-        email: contactData.email || '',
-        address: contactData.address || '',
+        ...contactData,
         createdAt: new Date().toISOString(),
-        lastLocation: null,
-        smsHistory: [],
-        audioRecordings: [],
+        history: [], // Array to store activity history
       };
       
       contacts.push(newContact);
-      await this.saveContactsToJSON(contacts);
+      await this.saveContacts(contacts);
       return newContact;
     } catch (error) {
-      console.error('❌ Add contact error:', error);
-      return null;
+      console.error('Error adding contact:', error);
+      throw error;
     }
   }
 
+  // Update a contact
   async updateContact(contactId, updateData) {
     try {
       const contacts = await this.getContactsFromJSON();
       const index = contacts.findIndex(c => c.id === contactId);
       
-      if (index !== -1) {
-        contacts[index] = {...contacts[index], ...updateData};
-        await this.saveContactsToJSON(contacts);
-        return contacts[index];
+      if (index === -1) {
+        throw new Error('Contact not found');
       }
-      return null;
+      
+      contacts[index] = {
+        ...contacts[index],
+        ...updateData,
+        updatedAt: new Date().toISOString(),
+      };
+      
+      await this.saveContacts(contacts);
+      return contacts[index];
     } catch (error) {
-      console.error('❌ Update error:', error);
-      return null;
+      console.error('Error updating contact:', error);
+      throw error;
     }
   }
 
+  // Delete a contact
   async deleteContact(contactId) {
     try {
-      const contacts = await this.getContactsFromJSON();
-      const filtered = contacts.filter(c => c.id !== contactId);
-      await this.saveContactsToJSON(filtered);
+      let contacts = await this.getContactsFromJSON();
+      contacts = contacts.filter(c => c.id !== contactId);
+      await this.saveContacts(contacts);
       return true;
     } catch (error) {
-      console.error('❌ Delete error:', error);
-      return false;
+      console.error('Error deleting contact:', error);
+      throw error;
     }
   }
 
+  // Save location activity to contact history
   async saveLocationToContact(contactId, locationData) {
     try {
       const contacts = await this.getContactsFromJSON();
-      const contact = contacts.find(c => c.id === contactId);
+      const index = contacts.findIndex(c => c.id === contactId);
       
-      if (contact) {
-        contact.lastLocation = {
-          ...locationData,
-          timestamp: new Date().toISOString(),
-        };
-        await this.saveContactsToJSON(contacts);
-        return true;
+      if (index === -1) {
+        throw new Error('Contact not found');
       }
-      return false;
+      
+      const historyItem = {
+        type: 'location',
+        ...locationData,
+        timestamp: new Date().toISOString(),
+      };
+      
+      if (!contacts[index].history) {
+        contacts[index].history = [];
+      }
+      
+      contacts[index].history.unshift(historyItem); // Add to beginning
+      await this.saveContacts(contacts);
+      return true;
     } catch (error) {
-      console.error('❌ Save location error:', error);
-      return false;
+      console.error('Error saving location to contact:', error);
+      throw error;
     }
   }
 
+  // Save SMS activity to contact history
   async saveSMSToContact(contactId, smsData) {
     try {
       const contacts = await this.getContactsFromJSON();
-      const contact = contacts.find(c => c.id === contactId);
+      const index = contacts.findIndex(c => c.id === contactId);
       
-      if (contact) {
-        if (!contact.smsHistory) contact.smsHistory = [];
-        
-        contact.smsHistory.push({
-          message: smsData.message,
-          type: smsData.type,
-          timestamp: new Date().toISOString(),
-        });
-        
-        await this.saveContactsToJSON(contacts);
-        return true;
+      if (index === -1) {
+        throw new Error('Contact not found');
       }
-      return false;
+      
+      const historyItem = {
+        type: 'sms',
+        ...smsData,
+        timestamp: new Date().toISOString(),
+      };
+      
+      if (!contacts[index].history) {
+        contacts[index].history = [];
+      }
+      
+      contacts[index].history.unshift(historyItem);
+      await this.saveContacts(contacts);
+      return true;
     } catch (error) {
-      console.error('❌ Save SMS error:', error);
-      return false;
+      console.error('Error saving SMS to contact:', error);
+      throw error;
     }
   }
 
+  // Save recording activity to contact history
   async saveRecordingToContact(contactId, recordingData) {
     try {
       const contacts = await this.getContactsFromJSON();
-      const contact = contacts.find(c => c.id === contactId);
+      const index = contacts.findIndex(c => c.id === contactId);
       
-      if (contact) {
-        if (!contact.audioRecordings) contact.audioRecordings = [];
-        
-        contact.audioRecordings.push({
-          id: Date.now().toString(),
-          localPath: recordingData.localPath,
-          firebaseUrl: recordingData.firebaseUrl,
-          duration: recordingData.duration || 0,
-          timestamp: new Date().toISOString(),
-        });
-        
-        await this.saveContactsToJSON(contacts);
-        return true;
+      if (index === -1) {
+        throw new Error('Contact not found');
       }
-      return false;
+      
+      const historyItem = {
+        type: 'recording',
+        ...recordingData,
+        timestamp: new Date().toISOString(),
+      };
+      
+      if (!contacts[index].history) {
+        contacts[index].history = [];
+      }
+      
+      contacts[index].history.unshift(historyItem);
+      await this.saveContacts(contacts);
+      return true;
     } catch (error) {
-      console.error('❌ Save recording error:', error);
-      return false;
+      console.error('Error saving recording to contact:', error);
+      throw error;
+    }
+  }
+
+  // Get contact by ID
+  async getContactById(contactId) {
+    try {
+      const contacts = await this.getContactsFromJSON();
+      return contacts.find(c => c.id === contactId) || null;
+    } catch (error) {
+      console.error('Error getting contact:', error);
+      throw error;
     }
   }
 }
