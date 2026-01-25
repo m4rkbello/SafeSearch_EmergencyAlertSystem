@@ -5,11 +5,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import HomeScreen from '../screens/HomeScreen';
 import AddContactScreen from '../screens/AddContactScreen';
-import ContactDetailsScreen from '../screens/ContactDetailsScreen';
+import ContactDetailsScreen from '../screens/ContactDetailScreen';
 
-import { AudioProvider } from '../contexts/AudioContext';
-import { ContactProvider } from '../contexts/ContactContext';
-import { LocationProvider } from '../contexts/LocationContext';
+import { AudioProvider } from '../context/AudioContext';
+import { ContactProvider } from '../context/ContactContext';
+import { LocationProvider } from '../context/LocationContext';
 
 const Stack = createNativeStackNavigator();
 

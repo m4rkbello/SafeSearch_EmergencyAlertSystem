@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useContacts } from '../context/ContactContext';
-import { useAudio } from '../contexts/AudioContext';
+import { useAudio } from '../context/AudioContext';
 import SMSService from '../services/SMSService';
 import EnhancedLocationService from '../services/EnhanceLocationService';
 import ContactCard from '../components/ContactCard';

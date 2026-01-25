@@ -10,9 +10,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useContacts } from '../contexts/ContactContext';
-import { useLocation } from '../contexts/LocationContext';
-import { useAudio } from '../contexts/AudioContext';
+import { useContacts } from '../context/ContactContext';
+import { useLocation } from '../context/LocationContext';
+import { useAudio } from '../context/AudioContext';
 import SMSService from '../services/SMSService';
 
 const ContactDetailsScreen = ({ route, navigation }) => {

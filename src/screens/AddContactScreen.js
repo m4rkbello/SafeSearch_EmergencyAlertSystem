@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useContacts } from '../contexts/ContactContext';
+import { useContacts } from '../context/ContactContext';
 
 const AddContactScreen = ({ navigation }) => {
   const { addContact } = useContacts();

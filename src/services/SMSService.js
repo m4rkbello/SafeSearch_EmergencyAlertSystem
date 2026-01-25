@@ -1,6 +1,6 @@
 import { Platform, PermissionsAndroid, Linking } from 'react-native';
 import SendSMS from 'react-native-get-sms-android';
-import EnhancedLocationService from './EnhancedLocationService';
+import EnhancedLocationService from '../services/EnhanceLocationService';
 
 class SMSService {
   constructor() {
