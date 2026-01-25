@@ -15,6 +15,17 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.safesearch"
+    
+    // Add Java/Kotlin compatibility
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+    
     defaultConfig {
         applicationId "com.safesearch"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -22,6 +33,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -30,6 +42,7 @@ android {
             keyPassword 'android'
         }
     }
+    
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -46,6 +59,10 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:hermes-android")
     
+    // Firebase BOM
+    implementation platform("com.google.firebase:firebase-bom:${rootProject.ext.firebaseBomVersion}")
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-storage'
     
     // Fix SMS library
     implementation(project(':react-native-get-sms-android')) {
@@ -55,7 +72,6 @@ dependencies {
     // AndroidX dependencies
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    
-    // REMOVED FLIPPER DEPENDENCIES - Not needed for React Native 0.83+
 }
 
+apply plugin: 'com.google.gms.google-services'
