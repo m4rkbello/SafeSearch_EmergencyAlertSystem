@@ -1,49 +1,53 @@
-// buildscript {
-//     ext {
-//         buildToolsVersion = "36.0.0"
-//         minSdkVersion = 24
-//         compileSdkVersion = 36
-//         targetSdkVersion = 36
-//         ndkVersion = "27.1.12297006"
-//         kotlinVersion = "2.1.20"
-//     }
-//     repositories {
-//         google()
-//         mavenCentral()
-//     }
-//     dependencies {
-//         classpath("com.android.tools.build:gradle")
-//         classpath("com.facebook.react:react-native-gradle-plugin")
-//         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
-//     }
-// }
-
-// apply plugin: "com.facebook.react.rootproject"
-
-
 buildscript {
     ext {
-        // Define these required properties
-        compileSdkVersion = 34  // Or your preferred SDK version
-        minSdkVersion = 23
+        buildToolsVersion = "34.0.0"
+        minSdkVersion = 24 
+        compileSdkVersion = 34
         targetSdkVersion = 34
-        ndkVersion = "25.1.8937393"  // Add this line
-        
-        // Firebase versions
-        firebaseMessagingVersion = "23.0.0"
+        ndkVersion = "26.1.10909125"  // Changed to NDK 26
+        kotlinVersion = "1.9.22"
+        firebaseBomVersion = "33.0.0"
     }
-    
+    repositories {
+        google()
+        mavenCentral()
+    }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.android.tools.build:gradle:8.7.3")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("com.google.gms:google-services:4.3.15")
-        
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("com.google.gms:google-services:4.4.0")
     }
 }
 
 allprojects {
     repositories {
+        maven {
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
         google()
         mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+    }
+    
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core-ktx:1.12.0'
+            force 'androidx.appcompat:appcompat:1.6.1'
+        }
+    }
+}
+
+project.afterEvaluate {
+    def smsProject = project.findProject(':react-native-get-sms-android')
+    if (smsProject) {
+        smsProject.repositories {
+            google()
+            mavenCentral()
+            maven { url 'https://www.jitpack.io' }
+        }
     }
 }

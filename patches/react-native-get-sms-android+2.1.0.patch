@@ -1,0 +1,21 @@
+diff --git a/node_modules/react-native-get-sms-android/android/build.gradle b/node_modules/react-native-get-sms-android/android/build.gradle
+index 0de40fc..f813d9e 100644
+--- a/node_modules/react-native-get-sms-android/android/build.gradle
++++ b/node_modules/react-native-get-sms-android/android/build.gradle
+@@ -30,13 +30,11 @@ android {
+     }
+ }
+ 
++// Change from jcenter() to mavenCentral()
+ repositories {
+     google()
+-    maven {
+-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+-        url "$rootDir/../node_modules/react-native/android"
+-    }
+-    jcenter()
++    mavenCentral()  // REPLACE jcenter() WITH THIS
++    maven { url "https://jitpack.io" }
+ }
+ 
+ dependencies {

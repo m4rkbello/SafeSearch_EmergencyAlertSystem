@@ -14,14 +14,14 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useContacts } from '../contexts/ContactContext';
+import { useContacts } from '../context/ContactContext';
 import { useAudio } from '../contexts/AudioContext';
 import SMSService from '../services/SMSService';
-import EnhancedLocationService from '../services/EnhancedLocationService';
+import EnhancedLocationService from '../services/EnhanceLocationService';
 import ContactCard from '../components/ContactCard';
 
 const HomeScreen = ({ navigation }) => {
-  const { contacts, loading, saveLocationToContact, saveSMSToContact, saveRecordingToContact } = useContacts();
+  const { contacts, loading, saveLocationToContact, saveRecordingToContact } = useContacts();
   const { isRecording, startRecording, stopRecording, uploadToFirebase } = useAudio();
   
   const [selectedContacts, setSelectedContacts] = useState([]);
