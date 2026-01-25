@@ -1,30 +1,27 @@
-import { AudioRecorder, AudioPlayer, AudioUtils } from 'react-native-audio-toolkit';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import RNFS from 'react-native-fs';
+
+const audioRecorderPlayer = new AudioRecorderPlayer();
 
 class AudioService {
   constructor() {
+    this.audioRecorderPlayer = audioRecorderPlayer;
     this.recordingPath = null;
-    this.currentPlayer = null;
-    this.isRecording = false;
-    this.isPlaying = false;
   }
 
   async startRecording() {
     try {
-      // Create unique file path
-      const path = `${AudioUtils.DocumentDirectoryPath}/recording_${Date.now()}.mp3`;
+      const path = `${RNFS.DocumentDirectoryPath}/recording_${Date.now()}.m4a`;
       
-      // Prepare recording with MP3 settings
-      AudioRecorder.prepareRecordingAtPath(path, {
-        SampleRate: 44100,           // Standard sample rate
-        Channels: 1,                 // Mono (1) or Stereo (2)
-        AudioQuality: 'High',        // Low, Medium, High
-        AudioEncoding: 'mp3',        // Can also use 'aac', 'wav'
-      });
-
-      // Start recording
-      AudioRecorder.startRecording();
-      this.isRecording = true;
+      const audioSet = {
+        AudioEncoderAndroid: 3, // AAC
+        AudioSourceAndroid: 1, // MIC
+        AVEncoderAudioQualityKeyIOS: 50,
+        AVNumberOfChannelsKeyIOS: 2,
+        AVFormatIDKeyIOS: 'm4a',
+      };
+      
+      await this.audioRecorderPlayer.startRecorder(path, audioSet);
       this.recordingPath = path;
       
       return {
@@ -39,25 +36,14 @@ class AudioService {
 
   async stopRecording() {
     try {
-      if (!this.isRecording) {
-        throw new Error('No recording in progress');
-      }
-
-      // Stop recording
-      AudioRecorder.stopRecording();
-      this.isRecording = false;
+      const result = await this.audioRecorderPlayer.stopRecorder();
+      this.audioRecorderPlayer.removeRecordBackListener();
       
-      // Wait a moment for file to be finalized
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Get file info
-      const fileInfo = await RNFS.stat(this.recordingPath);
       const duration = await this.getAudioDuration(this.recordingPath);
       
       return {
         path: this.recordingPath,
         duration: duration,
-        size: fileInfo.size,
       };
     } catch (error) {
       console.error('Error stopping recording:', error);
@@ -67,25 +53,8 @@ class AudioService {
 
   async getAudioDuration(filePath) {
     try {
-      // Create a player to get duration
-      const player = new AudioPlayer(filePath, {
-        autoDestroy: false
-      });
-      
-      return new Promise((resolve, reject) => {
-        player.on('loaded', (data) => {
-          resolve(data.duration);
-          player.destroy();
-        });
-        
-        player.on('error', (error) => {
-          console.error('Error getting duration:', error);
-          player.destroy();
-          resolve(0);
-        });
-        
-        player.prepare();
-      });
+      const info = await this.audioRecorderPlayer.getInfo(filePath);
+      return info.duration;
     } catch (error) {
       console.error('Error getting audio duration:', error);
       return 0;
@@ -94,57 +63,29 @@ class AudioService {
 
   async playRecording(filePath) {
     try {
-      if (this.currentPlayer) {
-        await this.stopPlayback();
-      }
-      
-      this.currentPlayer = new AudioPlayer(filePath);
-      
-      return new Promise((resolve, reject) => {
-        this.currentPlayer.on('prepared', () => {
-          this.currentPlayer.play();
-          this.isPlaying = true;
-          resolve();
-        });
-        
-        this.currentPlayer.on('error', (error) => {
-          reject(error);
-        });
-        
-        this.currentPlayer.prepare();
-      });
+      await this.audioRecorderPlayer.startPlayer(filePath);
     } catch (error) {
       console.error('Error playing recording:', error);
       throw error;
     }
   }
 
-  async pausePlayback() {
-    if (this.currentPlayer && this.isPlaying) {
-      this.currentPlayer.pause();
-      this.isPlaying = false;
-    }
-  }
-
-  async resumePlayback() {
-    if (this.currentPlayer && !this.isPlaying) {
-      this.currentPlayer.play();
-      this.isPlaying = true;
+  async pauseRecording() {
+    try {
+      await this.audioRecorderPlayer.pausePlayer();
+    } catch (error) {
+      console.error('Error pausing recording:', error);
+      throw error;
     }
   }
 
   async stopPlayback() {
-    if (this.currentPlayer) {
-      this.currentPlayer.stop();
-      this.currentPlayer.destroy();
-      this.currentPlayer = null;
-      this.isPlaying = false;
+    try {
+      await this.audioRecorderPlayer.stopPlayer();
+    } catch (error) {
+      console.error('Error stopping playback:', error);
+      throw error;
     }
-  }
-
-  cleanup() {
-    this.stopPlayback();
-    this.isRecording = false;
   }
 }
 
