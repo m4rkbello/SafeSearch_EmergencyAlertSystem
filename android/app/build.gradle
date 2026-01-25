@@ -16,7 +16,23 @@ android {
 
     namespace "com.safesearch"
     
-    // Add Java/Kotlin compatibility
+    // Add this block for C++ configuration
+    defaultConfig {
+        applicationId "com.safesearch"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        
+        // Add C++ flags
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++17"
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -24,14 +40,6 @@ android {
     
     kotlinOptions {
         jvmTarget = "17"
-    }
-    
-    defaultConfig {
-        applicationId "com.safesearch"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
     }
     
     signingConfigs {
@@ -59,17 +67,14 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:hermes-android")
     
-    // Firebase BOM
     implementation platform("com.google.firebase:firebase-bom:${rootProject.ext.firebaseBomVersion}")
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-storage'
     
-    // Fix SMS library
     implementation(project(':react-native-get-sms-android')) {
         exclude group: 'com.android.support', module: 'support-v4'
     }
     
-    // AndroidX dependencies
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
