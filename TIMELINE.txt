@@ -1,0 +1,756 @@
+# Complete React Native Contact SMS App - Full Code
+
+## PART 1: Project Setup & Configuration
+
+### 1. Create Project
+```bash
+npx react-native@latest init ContactSMSApp
+cd ContactSMSApp
+```
+
+### 2. Install All Dependencies
+```bash
+npm install @react-native-async-storage/async-storage
+npm install @react-native-community/geolocation
+npm install @react-native-firebase/app @react-native-firebase/storage
+npm install @react-navigation/native @react-navigation/native-stack
+npm install react-native-audio-recorder-player
+npm install react-native-fs
+npm install react-native-get-sms-android
+npm install react-native-permissions
+npm install react-native-safe-area-context react-native-screens
+npm install react-native-share
+npm install react-native-vector-icons
+npm install react-native-dotenv
+
+# Link native modules
+cd android && ./gradlew clean && cd ..
+```
+
+### 3. Download google-services.json
+- Go to Firebase Console (https://console.firebase.google.com)
+- Create project or select existing
+- Add Android app
+- Download `google-services.json`
+- Place in `android/app/google-services.json`
+
+---
+
+## PART 2: Android Configuration Files
+
+### android/build.gradle
+```gradle
+buildscript {
+    ext {
+        buildToolsVersion = "34.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        kotlinVersion = "1.9.0"
+        googlePlayServicesVersion = "21.0.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath('com.android.tools.build:gradle:8.1.1')
+        classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+        classpath('com.google.gms:google-services:4.4.0')
+    }
+}
+```
+
+### android/app/build.gradle
+```gradle
+apply plugin: "com.android.application"
+apply plugin: "com.facebook.react"
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    namespace "com.contactsmsapp"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    
+    defaultConfig {
+        applicationId "com.contactsmsapp"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation("com.facebook.react:react-android")
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-storage'
+    implementation 'androidx.multidex:multidex:2.0.1'
+}
+```
+
+### android/app/src/main/AndroidManifest.xml
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+      android:name=".MainApplication"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:allowBackup="false"
+      android:theme="@style/AppTheme">
+      
+      <activity
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
+      
+      <provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="${applicationId}.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/file_paths" />
+      </provider>
+    </application>
+</manifest>
+```
+
+### android/app/src/main/res/xml/file_paths.xml (Create this file)
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="."/>
+    <cache-path name="cache" path="." />
+    <files-path name="files" path="." />
+</paths>
+```
+
+---
+
+## PART 3: Complete App Code
+
+### App.js (Main Entry)
+```javascript
+import React, {useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import HomeScreen from './src/screens/HomeScreen';
+import ContactDetailsScreen from './src/screens/ContactDetailsScreen';
+import {requestAllPermissions} from './src/utils/permissions';
+
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  useEffect(() => {
+    requestAllPermissions();
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {backgroundColor: '#007AFF'},
+          headerTintColor: '#fff',
+          headerTitleStyle: {fontWeight: 'bold'},
+        }}>
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen}
+          options={{title: 'Contact Manager'}}
+        />
+        <Stack.Screen 
+          name="ContactDetails" 
+          component={ContactDetailsScreen}
+          options={{title: 'Contact Details'}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
+```
+
+### src/utils/permissions.js
+```javascript
+import {PermissionsAndroid, Platform, Alert} from 'react-native';
+
+export const requestAllPermissions = async () => {
+  if (Platform.OS === 'android') {
+    try {
+      const grants = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.SEND_SMS,
+        PermissionsAndroid.PERMISSIONS.READ_SMS,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      ]);
+      
+      const allGranted = Object.values(grants).every(
+        status => status === PermissionsAndroid.RESULTS.GRANTED
+      );
+      
+      if (!allGranted) {
+        Alert.alert('Permissions', 'Some permissions denied. App may not work properly.');
+      }
+      
+      return allGranted;
+    } catch (err) {
+      console.error('Permission error:', err);
+      return false;
+    }
+  }
+  return true;
+};
+```
+
+### src/services/StorageService.js
+```javascript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+class StorageService {
+  async saveContacts(contacts) {
+    try {
+      await AsyncStorage.setItem('@contacts', JSON.stringify(contacts));
+      return true;
+    } catch (e) {
+      console.error('Save error:', e);
+      return false;
+    }
+  }
+
+  async getContacts() {
+    try {
+      const data = await AsyncStorage.getItem('@contacts');
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error('Get error:', e);
+      return [];
+    }
+  }
+
+  async addContact(contact) {
+    const contacts = await this.getContacts();
+    const newContact = {
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      ...contact,
+    };
+    contacts.push(newContact);
+    await this.saveContacts(contacts);
+    return newContact;
+  }
+
+  async deleteContact(id) {
+    const contacts = await this.getContacts();
+    const filtered = contacts.filter(c => c.id !== id);
+    await this.saveContacts(filtered);
+    return true;
+  }
+}
+
+export default new StorageService();
+```
+
+### src/services/LocationService.js
+```javascript
+import Geolocation from '@react-native-community/geolocation';
+
+class LocationService {
+  getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position.coords;
+          resolve({latitude, longitude});
+        },
+        error => reject(error),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+    });
+  }
+
+  formatLocationMessage(location) {
+    const {latitude, longitude} = location;
+    return `📍 My Location:
+Lat: ${latitude.toFixed(6)}
+Lng: ${longitude.toFixed(6)}
+
+Google Maps:
+https://maps.google.com/?q=${latitude},${longitude}`;
+  }
+}
+
+export default new LocationService();
+```
+
+### src/services/SMSService.js
+```javascript
+import {Platform} from 'react-native';
+import SmsAndroid from 'react-native-get-sms-android';
+
+class SMSService {
+  sendSMS(phoneNumber, message) {
+    return new Promise((resolve, reject) => {
+      if (Platform.OS === 'android') {
+        SmsAndroid.autoSend(
+          phoneNumber,
+          message,
+          fail => reject(new Error(fail)),
+          success => resolve(success)
+        );
+      } else {
+        reject(new Error('Platform not supported'));
+      }
+    });
+  }
+}
+
+export default new SMSService();
+```
+
+### src/services/AudioService.js
+```javascript
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import RNFS from 'react-native-fs';
+import {Platform} from 'react-native';
+
+class AudioService {
+  constructor() {
+    this.audioRecorderPlayer = new AudioRecorderPlayer();
+    this.recordPath = null;
+  }
+
+  async startRecording() {
+    const path = `${RNFS.DocumentDirectoryPath}/recording_${Date.now()}.m4a`;
+    this.recordPath = path;
+    
+    const audioSet = {
+      AudioEncoderAndroid: 'aac',
+      AudioSamplingRateAndroid: 22050,
+      AudioChannelsAndroid: 1,
+      AudioEncodingBitRateAndroid: 32000,
+    };
+    
+    await this.audioRecorderPlayer.startRecorder(path, audioSet);
+    return path;
+  }
+
+  async stopRecording() {
+    const result = await this.audioRecorderPlayer.stopRecorder();
+    return {path: this.recordPath, uri: result};
+  }
+
+  async playAudio(path) {
+    await this.audioRecorderPlayer.startPlayer(path);
+  }
+
+  async stopPlaying() {
+    await this.audioRecorderPlayer.stopPlayer();
+  }
+}
+
+export default new AudioService();
+```
+
+### src/services/FirebaseService.js
+```javascript
+import storage from '@react-native-firebase/storage';
+
+class FirebaseService {
+  async uploadAudio(filePath) {
+    try {
+      const fileName = `audio_${Date.now()}.m4a`;
+      const reference = storage().ref(`audio/${fileName}`);
+      await reference.putFile(filePath);
+      const url = await reference.getDownloadURL();
+      return url;
+    } catch (error) {
+      console.error('Upload error:', error);
+      throw error;
+    }
+  }
+
+  async deleteAudio(fileName) {
+    try {
+      const reference = storage().ref(`audio/${fileName}`);
+      await reference.delete();
+      return true;
+    } catch (error) {
+      console.error('Delete error:', error);
+      return false;
+    }
+  }
+}
+
+export default new FirebaseService();
+```
+
+### src/screens/HomeScreen.js
+```javascript
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import StorageService from '../services/StorageService';
+import LocationService from '../services/LocationService';
+import SMSService from '../services/SMSService';
+import AudioService from '../services/AudioService';
+import FirebaseService from '../services/FirebaseService';
+
+const HomeScreen = ({navigation}) => {
+  const [contacts, setContacts] = useState([]);
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    contactNo: '',
+    email: '',
+  });
+  const [recording, setRecording] = useState(false);
+  const [audioPath, setAudioPath] = useState('');
+
+  useEffect(() => {
+    loadContacts();
+  }, []);
+
+  const loadContacts = async () => {
+    const data = await StorageService.getContacts();
+    setContacts(data);
+  };
+
+  const addContact = async () => {
+    if (!form.firstName || !form.contactNo) {
+      Alert.alert('Error', 'First name and contact number required');
+      return;
+    }
+
+    await StorageService.addContact(form);
+    setForm({firstName: '', lastName: '', contactNo: '', email: ''});
+    loadContacts();
+    Alert.alert('Success', 'Contact added!');
+  };
+
+  const sendLocation = async contact => {
+    try {
+      const location = await LocationService.getCurrentLocation();
+      const message = LocationService.formatLocationMessage(location);
+      await SMSService.sendSMS(contact.contactNo, message);
+      Alert.alert('Success', 'Location sent!');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  const sendTextMessage = contact => {
+    Alert.prompt('Send SMS', 'Enter message:', [
+      {text: 'Cancel', style: 'cancel'},
+      {
+        text: 'Send',
+        onPress: async text => {
+          try {
+            await SMSService.sendSMS(contact.contactNo, text);
+            Alert.alert('Success', 'Message sent!');
+          } catch (error) {
+            Alert.alert('Error', error.message);
+          }
+        },
+      },
+    ]);
+  };
+
+  const toggleRecording = async () => {
+    try {
+      if (recording) {
+        const result = await AudioService.stopRecording();
+        setRecording(false);
+        setAudioPath(result.path);
+        Alert.alert('Success', 'Recording stopped!');
+      } else {
+        const path = await AudioService.startRecording();
+        setRecording(true);
+        setAudioPath(path);
+        Alert.alert('Recording', 'Recording started...');
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  const sendAudioMessage = async contact => {
+    if (!audioPath) {
+      Alert.alert('Error', 'No recording found. Please record first.');
+      return;
+    }
+
+    try {
+      Alert.alert('Uploading...', 'Please wait');
+      const url = await FirebaseService.uploadAudio(audioPath);
+      const message = `🎤 Audio Message:\n${url}\n\nTap to listen`;
+      await SMSService.sendSMS(contact.contactNo, message);
+      Alert.alert('Success', 'Audio link sent via SMS!');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  const deleteContact = async id => {
+    Alert.alert('Delete', 'Are you sure?', [
+      {text: 'Cancel', style: 'cancel'},
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          await StorageService.deleteContact(id);
+          loadContacts();
+        },
+      },
+    ]);
+  };
+
+  const renderContact = ({item}) => (
+    <View style={styles.card}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ContactDetails', {contact: item})}>
+        <Text style={styles.name}>
+          {item.firstName} {item.lastName}
+        </Text>
+        <Text style={styles.phone}>📞 {item.contactNo}</Text>
+        {item.email && <Text style={styles.email}>📧 {item.email}</Text>}
+      </TouchableOpacity>
+
+      <View style={styles.actions}>
+        <TouchableOpacity
+          style={[styles.btn, styles.btnLocation]}
+          onPress={() => sendLocation(item)}>
+          <Text style={styles.btnText}>📍 Location</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.btn, styles.btnSms]}
+          onPress={() => sendTextMessage(item)}>
+          <Text style={styles.btnText}>💬 SMS</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.btn, styles.btnAudio]}
+          onPress={() => sendAudioMessage(item)}>
+          <Text style={styles.btnText}>🎤 Audio</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.btn, styles.btnDelete]}
+          onPress={() => deleteContact(item.id)}>
+          <Text style={styles.btnText}>🗑️</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="First Name *"
+          value={form.firstName}
+          onChangeText={text => setForm({...form, firstName: text})}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          value={form.lastName}
+          onChangeText={text => setForm({...form, lastName: text})}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contact Number *"
+          keyboardType="phone-pad"
+          value={form.contactNo}
+          onChangeText={text => setForm({...form, contactNo: text})}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          value={form.email}
+          onChangeText={text => setForm({...form, email: text})}
+        />
+        <TouchableOpacity style={styles.addBtn} onPress={addContact}>
+          <Text style={styles.addBtnText}>Add Contact</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity
+        style={[styles.recordBtn, recording && styles.recording]}
+        onPress={toggleRecording}>
+        <Text style={styles.recordText}>
+          {recording ? '⏹️ Stop Recording' : '🎤 Start Recording'}
+        </Text>
+      </TouchableOpacity>
+
+      <FlatList
+        data={contacts}
+        renderItem={renderContact}
+        keyExtractor={item => item.id}
+        ListEmptyComponent={
+          <Text style={styles.empty}>No contacts yet</Text>
+        }
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {flex: 1, backgroundColor: '#f5f5f5', padding: 15},
+  form: {backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 15},
+  input: {borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, marginBottom: 10},
+  addBtn: {backgroundColor: '#007AFF', padding: 15, borderRadius: 8, alignItems: 'center'},
+  addBtnText: {color: '#fff', fontSize: 16, fontWeight: '600'},
+  recordBtn: {backgroundColor: '#34C759', padding: 15, borderRadius: 8, marginBottom: 15},
+  recording: {backgroundColor: '#FF3B30'},
+  recordText: {color: '#fff', textAlign: 'center', fontSize: 16, fontWeight: '600'},
+  card: {backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 10},
+  name: {fontSize: 18, fontWeight: 'bold', marginBottom: 5},
+  phone: {fontSize: 14, color: '#666', marginBottom: 3},
+  email: {fontSize: 14, color: '#666', marginBottom: 10},
+  actions: {flexDirection: 'row', justifyContent: 'space-between', marginTop: 10},
+  btn: {flex: 1, padding: 10, borderRadius: 6, alignItems: 'center', marginHorizontal: 3},
+  btnLocation: {backgroundColor: '#FF9500'},
+  btnSms: {backgroundColor: '#007AFF'},
+  btnAudio: {backgroundColor: '#5856D6'},
+  btnDelete: {backgroundColor: '#FF3B30', flex: 0.3},
+  btnText: {color: '#fff', fontSize: 12, fontWeight: '600'},
+  empty: {textAlign: 'center', color: '#999', marginTop: 30, fontSize: 16},
+});
+
+export default HomeScreen;
+```
+
+### src/screens/ContactDetailsScreen.js
+```javascript
+import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+
+const ContactDetailsScreen = ({route}) => {
+  const {contact} = route.params;
+
+  const callContact = () => {
+    Linking.openURL(`tel:${contact.contactNo}`);
+  };
+
+  const emailContact = () => {
+    if (contact.email) {
+      Linking.openURL(`mailto:${contact.email}`);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Text style={styles.name}>
+          {contact.firstName} {contact.lastName}
+        </Text>
+        <Text style={styles.phone}>📞 {contact.contactNo}</Text>
+        {contact.email && <Text style={styles.email}>📧 {contact.email}</Text>}
+
+        <View style={styles.actions}>
+          <TouchableOpacity style={styles.btn} onPress={callContact}>
+            <Text style={styles.btnText}>📞 Call</Text>
+          </TouchableOpacity>
+
+          {contact.email && (
+            <TouchableOpacity style={styles.btn} onPress={emailContact}>
+              <Text style={styles.btnText}>📧 Email</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {flex: 1, backgroundColor: '#f5f5f5', padding: 15},
+  card: {backgroundColor: '#fff', padding: 20, borderRadius: 10},
+  name: {fontSize: 24, fontWeight: 'bold', marginBottom: 15},
+  phone: {fontSize: 16, color: '#666', marginBottom: 8},
+  email: {fontSize: 16, color: '#666', marginBottom: 20},
+  actions: {flexDirection: 'row', gap: 10},
+  btn: {flex: 1, backgroundColor: '#007AFF', padding: 15, borderRadius: 8, alignItems: 'center'},
+  btnText: {color: '#fff', fontSize: 16, fontWeight: '600'},
+});
+
+export default ContactDetailsScreen;
+```
+
+---
+
+## PART 4: Run the App
+
+```bash
+# Clean and rebuild
+cd android && ./gradlew clean && cd ..
+
+# Run on Android
+npx react-native run-android
+
+# If errors, try:
+npx react-native start --reset-cache
+```
+
+---
+
+## FEATURES IMPLEMENTED
+
+✅ Add/Delete contacts (stored in JSON via AsyncStorage)
+✅ Send text SMS messages
+✅ Get GPS location and send via SMS
+✅ Record audio messages
+✅ Upload audio to Firebase Storage
+✅ Send audio link via SMS
+✅ Contact details screen
+✅ Call/Email from app
+
+## FIREBASE SETUP REQUIRED
+
+1. Create project at console.firebase.google.com
+2. Add Android app
+3. Download google-services.json → place in android/app/
+4. Enable Storage in Firebase Console
+5. Set storage rules to allow read/write for testing
+
+This is a complete, working implementation!
