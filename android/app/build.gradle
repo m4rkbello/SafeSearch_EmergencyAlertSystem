@@ -61,8 +61,10 @@ dependencies {
     // React Native
     implementation "com.facebook.react:react-android"
     
-    // Use JSC
+    // USE JSC since hermesEnabled=false
     implementation "org.webkit:android-jsc:+"
+    
+    // Remove or comment out: implementation "com.facebook.react:hermes-android"
     
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"

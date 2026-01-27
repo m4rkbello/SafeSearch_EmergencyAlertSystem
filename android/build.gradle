@@ -19,11 +19,16 @@ buildscript {
 
 allprojects {
     repositories {
+        // ADD THESE BACK:
+        maven {
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
-        
-        // React Native 0.83+ uses Maven Central for published artifacts
-        // The local android folder no longer exists
     }
 }
