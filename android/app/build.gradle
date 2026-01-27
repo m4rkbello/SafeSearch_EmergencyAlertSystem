@@ -1,31 +1,25 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 
-def enableProguardInReleaseBuilds = false
-def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
-
 android {
-    ndkVersion rootProject.ext.ndkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdk rootProject.ext.compileSdkVersion
-
     namespace "com.safesearch"
+    compileSdk 34
+    
+    // ADD THIS: Enable BuildConfig generation
+    buildFeatures {
+        buildConfig true
+    }
     
     defaultConfig {
         applicationId "com.safesearch"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdk 24
+        targetSdk 34
         versionCode 1
         versionName "1.0"
-    }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    
-    kotlinOptions {
-        jvmTarget = "17"
+        
+        // These BuildConfig fields will now work
+        buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
+        buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
     }
     
     signingConfigs {
@@ -40,42 +34,47 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            // You can also override BuildConfig fields per build type if needed
+            buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
+            buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
         }
         release {
             signingConfig signingConfigs.debug
-            minifyEnabled enableProguardInReleaseBuilds
+            minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
+            buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
         }
     }
     
-    packagingOptions {
-        pickFirst 'lib/x86/libc++_shared.so'
-        pickFirst 'lib/x86_64/libc++_shared.so'
-        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
-        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
 dependencies {
-    implementation("com.facebook.react:react-android")
-    implementation("com.facebook.react:hermes-android")
+    // React Native
+    implementation "com.facebook.react:react-android"
     
-    implementation platform("com.google.firebase:firebase-bom:${rootProject.ext.firebaseBomVersion}")
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-storage'
+    // Use JSC
+    implementation "org.webkit:android-jsc:+"
     
-    implementation(project(':react-native-get-sms-android')) {
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"
     
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    // AndroidX
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     
-    if (hermesEnabled.toBoolean()) {
-        implementation("com.facebook.react:hermes-android")
-    } else {
-        implementation jscFlavor
-    }
+    // Your SMS library
+    implementation project(':react-native-get-sms-android')
+    
+    // Soloader
+    debugImplementation("com.facebook.soloader:soloader:0.10.5")
 }
-
-apply plugin: 'com.google.gms.google-services'

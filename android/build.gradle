@@ -5,8 +5,7 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         ndkVersion = "26.1.10909125"
-        kotlinVersion = "1.9.22"
-        firebaseBomVersion = "33.0.0"
+        kotlinVersion = "2.1.20"
     }
     repositories {
         google()
@@ -15,56 +14,16 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:8.3.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("com.google.gms:google-services:4.4.0")
     }
 }
 
 allprojects {
     repositories {
-        maven {
-            url("$rootDir/../node_modules/react-native/android")
-        }
-        maven {
-            url("$rootDir/../node_modules/jsc-android/dist")
-        }
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
-    }
-    
-    subprojects { subproject ->
-        afterEvaluate {
-            if (subproject.name == 'react-native-get-sms-android') {
-                if (subproject.android && !subproject.android.namespace) {
-                    subproject.android {
-                        namespace = "com.react.SmsPackage"
-                    }
-                }
-            }
-        }
-    }
-    
-    configurations.all {
-        resolutionStrategy {
-            force 'androidx.core:core-ktx:1.12.0'
-            force 'androidx.appcompat:appcompat:1.6.1'
-        }
-    }
-    
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
-    }
-}
-
-project.afterEvaluate {
-    def smsProject = project.findProject(':react-native-get-sms-android')
-    if (smsProject) {
-        smsProject.repositories {
-            google()
-            mavenCentral()
-            maven { url 'https://www.jitpack.io' }
-        }
+        
+        // React Native 0.83+ uses Maven Central for published artifacts
+        // The local android folder no longer exists
     }
 }
