@@ -4,7 +4,7 @@ buildscript {
         minSdkVersion = 24
         compileSdkVersion = 34
         targetSdkVersion = 34
-        ndkVersion = "27.0.11902837"  // Changed to NDK 27
+        ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.22"
         firebaseBomVersion = "33.0.0"
     }
@@ -14,7 +14,6 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.3.0")
-        classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("com.google.gms:google-services:4.4.0")
     }
@@ -31,6 +30,18 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
+    }
+    
+    subprojects { subproject ->
+        afterEvaluate {
+            if (subproject.name == 'react-native-get-sms-android') {
+                if (subproject.android && !subproject.android.namespace) {
+                    subproject.android {
+                        namespace = "com.react.SmsPackage"
+                    }
+                }
+            }
+        }
     }
     
     configurations.all {
