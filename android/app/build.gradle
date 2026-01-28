@@ -17,9 +17,9 @@ android {
         versionCode 1
         versionName "1.0"
         
-        // These BuildConfig fields will now work
         buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
-        buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
+        buildConfigField("boolean", "IS_HERMES_ENABLED", "false")
+        buildConfigField("boolean", "ENABLE_BRIDGELESS_ARCHITECTURE", "false")
     }
     
     signingConfigs {
