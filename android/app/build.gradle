@@ -1,11 +1,10 @@
 apply plugin: "com.android.application"
-apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "kotlin-android"
 
 android {
     namespace "com.safesearch"
     compileSdk 34
     
-    // ADD THIS: Enable BuildConfig generation
     buildFeatures {
         buildConfig true
     }
@@ -34,16 +33,15 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            // You can also override BuildConfig fields per build type if needed
             buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
-            buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
+            buildConfigField("boolean", "IS_HERMES_ENABLED", "false")
         }
         release {
             signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
-            buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
+            buildConfigField("boolean", "IS_HERMES_ENABLED", "false")
         }
     }
     
@@ -58,13 +56,14 @@ android {
 }
 
 dependencies {
-    // React Native
-    implementation "com.facebook.react:react-android"
+    // React Native - CORRECT: react-android not react-native
+    implementation "com.facebook.react:react-android:0.83.1"
     
-    // USE JSC since hermesEnabled=false
+    // JSC
     implementation "org.webkit:android-jsc:+"
     
-    // Remove or comment out: implementation "com.facebook.react:hermes-android"
+    // SMS library
+    implementation project(':react-native-get-sms-android')
     
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"
@@ -72,11 +71,7 @@ dependencies {
     // AndroidX
     implementation "androidx.core:core-ktx:1.12.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     
-    // Your SMS library
-    implementation project(':react-native-get-sms-android')
-    
-    // Soloader
+    // Debug
     debugImplementation("com.facebook.soloader:soloader:0.10.5")
 }

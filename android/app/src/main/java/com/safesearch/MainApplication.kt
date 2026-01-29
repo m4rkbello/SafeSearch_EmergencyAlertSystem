@@ -7,7 +7,7 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.shell.MainReactPackage
 import com.facebook.soloader.SoLoader
-import android.util.Log // Add this import
+import android.util.Log
 
 class MainApplication : Application(), ReactApplication {
 
@@ -15,27 +15,19 @@ class MainApplication : Application(), ReactApplication {
         override fun getPackages(): List<ReactPackage> {
             Log.d("SafeSearch", "getPackages() called")
             
-            val packages = mutableListOf<ReactPackage>()
-            packages.add(MainReactPackage())
-            
-            // Add your SMS package if needed
-            // packages.add(SmsPackage())
-            
-            return packages
+            // ONLY MainReactPackage - no other packages
+            return mutableListOf<ReactPackage>(
+                MainReactPackage()
+            )
         }
 
         override fun getJSMainModuleName(): String = "index"
         
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
         
-        // CRITICAL: Force disable New Architecture
         override val isNewArchEnabled: Boolean = false
         
-        // CRITICAL: Force disable Hermes
         override val isHermesEnabled: Boolean = false
-        
-        // ADD THIS: Force disable Bridgeless
-        override val isBridgelessEnabled: Boolean = false
     }
 
     override fun onCreate() {
