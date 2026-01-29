@@ -2,12 +2,9 @@ rootProject.name = 'SafeSearch'
 
 include ':app'
 
-// Include SMS library
+// UN-COMMENT these lines:
 include ':react-native-get-sms-android'
 project(':react-native-get-sms-android').projectDir = new File(
     rootProject.projectDir,
     '../node_modules/react-native-get-sms-android/android'
 )
-
-// React Native 0.83.1 - No gradle files to apply from node_modules
-// We'll handle dependencies manually

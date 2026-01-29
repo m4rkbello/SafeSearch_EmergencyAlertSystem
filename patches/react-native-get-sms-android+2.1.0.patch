@@ -1,29 +1,29 @@
 diff --git a/node_modules/react-native-get-sms-android/android/build.gradle b/node_modules/react-native-get-sms-android/android/build.gradle
-index 0de40fc..2e76022 100644
+index 0de40fc..47841e0 100644
 --- a/node_modules/react-native-get-sms-android/android/build.gradle
 +++ b/node_modules/react-native-get-sms-android/android/build.gradle
-@@ -1,12 +1,11 @@
+@@ -1,15 +1,3 @@
 -
- buildscript {
-     repositories {
-         google()
+-buildscript {
+-    repositories {
+-        google()
 -        jcenter()
-+        mavenCentral()
-     }
- 
-     dependencies {
+-    }
+-
+-    dependencies {
 -        classpath 'com.android.tools.build:gradle:3.3.1'
-+        classpath 'com.android.tools.build:gradle:8.3.0'
-     }
- }
+-    }
+-}
+-
+ apply plugin: 'com.android.library'
  
-@@ -17,14 +16,22 @@ def safeExtGet(prop, fallback) {
+ def safeExtGet(prop, fallback) {
+@@ -17,14 +5,21 @@ def safeExtGet(prop, fallback) {
  }
  
  android {
 -    compileSdkVersion safeExtGet('compileSdkVersion', 28)
 +    namespace "com.react.SmsRetriever"  // REQUIRED
-+    
 +    compileSdkVersion safeExtGet('compileSdkVersion', 34)
  
      defaultConfig {
@@ -43,32 +43,63 @@ index 0de40fc..2e76022 100644
      lintOptions {
          abortOnError false
      }
-@@ -32,14 +39,19 @@ android {
+@@ -32,14 +27,10 @@ android {
  
  repositories {
      google()
-+    mavenCentral()
-+    maven { url "https://jitpack.io" }
-+    
-+    // ADD THESE - Point to your React Native installation
-+    maven {
-+        url "$rootDir/../../node_modules/react-native/android"
-+    }
-     maven {
+-    maven {
 -        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
 -        url "$rootDir/../node_modules/react-native/android"
-+        url "$rootDir/../../node_modules/jsc-android/dist"
-     }
+-    }
 -    jcenter()
++    mavenCentral()
++    maven { url "https://jitpack.io" }
  }
  
  dependencies {
 -    compileOnly "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
-+    // CHANGE FROM + to specific version or use compileOnly
-+    compileOnly "com.facebook.react:react-android"  // Remove the version completely
++    compileOnly "com.facebook.react:react-android:0.83.1"
  }
 \ No newline at end of file
 -  
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/81a3251b50c7cbac124e75f11a3d2264/results.bin b/node_modules/react-native-get-sms-android/android/build/.transforms/81a3251b50c7cbac124e75f11a3d2264/results.bin
+new file mode 100644
+index 0000000..0d259dd
+--- /dev/null
++++ b/node_modules/react-native-get-sms-android/android/build/.transforms/81a3251b50c7cbac124e75f11a3d2264/results.bin
+@@ -0,0 +1 @@
++o/classes
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/81a3251b50c7cbac124e75f11a3d2264/transformed/classes/classes_dex/classes.dex b/node_modules/react-native-get-sms-android/android/build/.transforms/81a3251b50c7cbac124e75f11a3d2264/transformed/classes/classes_dex/classes.dex
+new file mode 100644
+index 0000000..7c9a9bc
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/.transforms/81a3251b50c7cbac124e75f11a3d2264/transformed/classes/classes_dex/classes.dex differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/results.bin b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/results.bin
+new file mode 100644
+index 0000000..7ed749e
+--- /dev/null
++++ b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/results.bin
+@@ -0,0 +1 @@
++o/bundleLibRuntimeToDirDebug
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule$1.dex b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule$1.dex
+new file mode 100644
+index 0000000..ef74386
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule$1.dex differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule$2.dex b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule$2.dex
+new file mode 100644
+index 0000000..6c238f2
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule$2.dex differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule.dex b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule.dex
+new file mode 100644
+index 0000000..6eb81ca
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsModule.dex differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsPackage.dex b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsPackage.dex
+new file mode 100644
+index 0000000..e2cafe4
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/react/SmsPackage.dex differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin
+new file mode 100644
+index 0000000..941137e
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/.transforms/c30a2024d71ba52dc036e75d0bba8cb5/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin differ
 diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml b/node_modules/react-native-get-sms-android/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
 new file mode 100644
 index 0000000..c561cfa
@@ -108,6 +139,10 @@ index 0000000..ca49139
 +  "elementType": "File"
 +}
 \ No newline at end of file
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/aar_main_jar/debug/syncDebugLibJars/classes.jar b/node_modules/react-native-get-sms-android/android/build/intermediates/aar_main_jar/debug/syncDebugLibJars/classes.jar
+new file mode 100644
+index 0000000..38d3643
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/aar_main_jar/debug/syncDebugLibJars/classes.jar differ
 diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties b/node_modules/react-native-get-sms-android/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
 new file mode 100644
 index 0000000..1211b1e
@@ -128,6 +163,13 @@ index 0000000..9e26dfe
 @@ -0,0 +1 @@
 +{}
 \ No newline at end of file
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/annotations_typedef_file/debug/extractDebugAnnotations/typedefs.txt b/node_modules/react-native-get-sms-android/android/build/intermediates/annotations_typedef_file/debug/extractDebugAnnotations/typedefs.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar b/node_modules/react-native-get-sms-android/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar
+new file mode 100644
+index 0000000..b9c58ed
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar differ
 diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar b/node_modules/react-native-get-sms-android/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar
 new file mode 100644
 index 0000000..889b136
@@ -155,15 +197,22 @@ index 0000000..39925dc
 +<?xml version="1.0" encoding="utf-8"?>
 +<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug" generated-set="debug$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\build\generated\res\resValues\debug"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated" generated-set="generated$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\build\generated\res\resValues\debug"/></dataSet><mergedItems/></merger>
 \ No newline at end of file
-diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/react-native-get-sms-android/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule$1.class b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule$1.class
 new file mode 100644
-index 0000000..1e0740f
---- /dev/null
-+++ b/node_modules/react-native-get-sms-android/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
-@@ -0,0 +1,2 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\main\shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\debug\shaders"/></dataSet></merger>
-\ No newline at end of file
+index 0000000..2ab741e
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule$1.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule$2.class b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule$2.class
+new file mode 100644
+index 0000000..582611f
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule$2.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule.class b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule.class
+new file mode 100644
+index 0000000..b603e88
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsModule.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsPackage.class b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsPackage.class
+new file mode 100644
+index 0000000..89cb791
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/react/SmsPackage.class differ
 diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt b/node_modules/react-native-get-sms-android/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
 new file mode 100644
 index 0000000..78ac5b8
@@ -219,6 +268,26 @@ index 0000000..08f4ebe
 @@ -0,0 +1 @@
 +0 Warning/Error
 \ No newline at end of file
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule$1.class b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule$1.class
+new file mode 100644
+index 0000000..2ab741e
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule$1.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule$2.class b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule$2.class
+new file mode 100644
+index 0000000..582611f
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule$2.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule.class b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule.class
+new file mode 100644
+index 0000000..b603e88
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsModule.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsPackage.class b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsPackage.class
+new file mode 100644
+index 0000000..89cb791
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/react/SmsPackage.class differ
+diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar
+new file mode 100644
+index 0000000..302c528
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar differ
 diff --git a/node_modules/react-native-get-sms-android/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt b/node_modules/react-native-get-sms-android/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
 new file mode 100644
 index 0000000..b70d989
@@ -226,6 +295,10 @@ index 0000000..b70d989
 +++ b/node_modules/react-native-get-sms-android/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
 @@ -0,0 +1 @@
 +com.react.SmsRetriever
+diff --git a/node_modules/react-native-get-sms-android/android/build/outputs/aar/react-native-get-sms-android-debug.aar b/node_modules/react-native-get-sms-android/android/build/outputs/aar/react-native-get-sms-android-debug.aar
+new file mode 100644
+index 0000000..87b932a
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/outputs/aar/react-native-get-sms-android-debug.aar differ
 diff --git a/node_modules/react-native-get-sms-android/android/build/outputs/logs/manifest-merger-debug-report.txt b/node_modules/react-native-get-sms-android/android/build/outputs/logs/manifest-merger-debug-report.txt
 new file mode 100644
 index 0000000..18b8917
@@ -248,6 +321,10 @@ index 0000000..18b8917
 +		INJECTED from C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\main\AndroidManifest.xml
 +	android:minSdkVersion
 +		INJECTED from C:\laragon\www\MOBILE_DEVELOPMENT_COURSE\SafeSearch\node_modules\react-native-get-sms-android\android\src\main\AndroidManifest.xml
+diff --git a/node_modules/react-native-get-sms-android/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/react-native-get-sms-android/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
+new file mode 100644
+index 0000000..f5fb32a
+Binary files /dev/null and b/node_modules/react-native-get-sms-android/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ
 diff --git a/node_modules/react-native-get-sms-android/android/src/main/AndroidManifest.xml b/node_modules/react-native-get-sms-android/android/src/main/AndroidManifest.xml
 index 3473b6c..a2af051 100644
 --- a/node_modules/react-native-get-sms-android/android/src/main/AndroidManifest.xml

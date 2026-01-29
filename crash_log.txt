@@ -1,0 +1,121 @@
+--------- beginning of system
+01-29 13:34:05.462   716   956 E ClipboardService: Denying clipboard access to com.android.chrome, application is not in focus nor is it a system service for user 0
+01-29 13:34:09.142   716   956 E ClipboardService: Denying clipboard access to com.android.chrome, application is not in focus nor is it a system service for user 0
+01-29 13:34:09.148   716   957 E ClipboardService: Denying clipboard access to com.android.chrome, application is not in focus nor is it a system service for user 0
+01-29 13:34:15.046   716   956 E ClipboardService: Denying clipboard access to com.android.chrome, application is not in focus nor is it a system service for user 0
+01-29 13:34:15.051   716   957 E ClipboardService: Denying clipboard access to com.android.chrome, application is not in focus nor is it a system service for user 0
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: Cannot acquire BluetoothActivityEnergyInfo
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 9
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:372)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2072)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:192)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectStats(BluetoothPowerStatsCollector.java:155)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector.collectAndDeliverStats(PowerStatsCollector.java:176)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:0)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.handleCallback(Handler.java:995)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loopOnce(Looper.java:248)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loop(Looper.java:338)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: Caused by: java.lang.RuntimeException: error: 9
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector$1.onBluetoothActivityEnergyInfoError(BluetoothPowerStatsCollector.java:181)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.lambda$onError$2(BluetoothAdapter.java:1059)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.lambda$executeFromBinder$0(BluetoothUtils.java:343)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.SystemServerInitThreadPool$$ExternalSyntheticLambda0.execute(R8$$SyntheticClass:0)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.executeFromBinder(BluetoothUtils.java:343)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.onError(BluetoothAdapter.java:1058)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter.requestControllerActivityEnergyInfo(BluetoothAdapter.java:2694)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BatteryStatsImpl$BluetoothStatsRetrieverImpl.requestControllerActivityEnergyInfo(BatteryStatsImpl.java:485)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:170)
+01-29 13:46:09.074   716   768 E BluetoothPowerStatsCollector: 	... 8 more
+01-29 13:56:38.521   716   768 E KernelCpuSpeedReader: Failed to read cpu-freq: /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state: open failed: ENOENT (No such file or directory)
+01-29 13:56:38.521   716   768 E KernelCpuSpeedReader: Failed to read cpu-freq: /sys/devices/system/cpu/cpu1/cpufreq/stats/time_in_state: open failed: ENOENT (No such file or directory)
+01-29 13:56:38.522   716   768 E KernelCpuSpeedReader: Failed to read cpu-freq: /sys/devices/system/cpu/cpu2/cpufreq/stats/time_in_state: open failed: ENOENT (No such file or directory)
+01-29 13:56:38.522   716   768 E KernelCpuSpeedReader: Failed to read cpu-freq: /sys/devices/system/cpu/cpu3/cpufreq/stats/time_in_state: open failed: ENOENT (No such file or directory)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: Cannot acquire BluetoothActivityEnergyInfo
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 9
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:372)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2072)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:192)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectStats(BluetoothPowerStatsCollector.java:155)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector.collectAndDeliverStats(PowerStatsCollector.java:176)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:0)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.handleCallback(Handler.java:995)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loopOnce(Looper.java:248)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loop(Looper.java:338)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: Caused by: java.lang.RuntimeException: error: 9
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector$1.onBluetoothActivityEnergyInfoError(BluetoothPowerStatsCollector.java:181)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.lambda$onError$2(BluetoothAdapter.java:1059)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.lambda$executeFromBinder$0(BluetoothUtils.java:343)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.SystemServerInitThreadPool$$ExternalSyntheticLambda0.execute(R8$$SyntheticClass:0)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.executeFromBinder(BluetoothUtils.java:343)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.onError(BluetoothAdapter.java:1058)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter.requestControllerActivityEnergyInfo(BluetoothAdapter.java:2694)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BatteryStatsImpl$BluetoothStatsRetrieverImpl.requestControllerActivityEnergyInfo(BatteryStatsImpl.java:485)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:170)
+01-29 13:56:38.533   716   768 E BluetoothPowerStatsCollector: 	... 8 more
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: Cannot acquire BluetoothActivityEnergyInfo
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 9
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:372)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2072)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:192)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectStats(BluetoothPowerStatsCollector.java:155)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector.collectAndDeliverStats(PowerStatsCollector.java:176)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:0)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.handleCallback(Handler.java:995)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loopOnce(Looper.java:248)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loop(Looper.java:338)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: Caused by: java.lang.RuntimeException: error: 9
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector$1.onBluetoothActivityEnergyInfoError(BluetoothPowerStatsCollector.java:181)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.lambda$onError$2(BluetoothAdapter.java:1059)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.lambda$executeFromBinder$0(BluetoothUtils.java:343)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.SystemServerInitThreadPool$$ExternalSyntheticLambda0.execute(R8$$SyntheticClass:0)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.executeFromBinder(BluetoothUtils.java:343)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.onError(BluetoothAdapter.java:1058)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter.requestControllerActivityEnergyInfo(BluetoothAdapter.java:2694)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BatteryStatsImpl$BluetoothStatsRetrieverImpl.requestControllerActivityEnergyInfo(BatteryStatsImpl.java:485)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:170)
+01-29 13:58:54.346   716   768 E BluetoothPowerStatsCollector: 	... 8 more
+--------- beginning of main
+01-29 13:58:54.512  4572 15963 E WorkSourceUtil: Could not find package: com.google.android.gms.westworld
+01-29 14:00:00.585  1666  1666 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+01-29 14:06:08.353  9733 16157 E FirebaseMessaging: Default FirebaseApp has not been initialized. Skip logging event to GA.
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: Cannot acquire BluetoothActivityEnergyInfo
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 9
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:372)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2072)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:192)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectStats(BluetoothPowerStatsCollector.java:155)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector.collectAndDeliverStats(PowerStatsCollector.java:176)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.PowerStatsCollector$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:0)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.handleCallback(Handler.java:995)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loopOnce(Looper.java:248)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.os.Looper.loop(Looper.java:338)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: Caused by: java.lang.RuntimeException: error: 9
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector$1.onBluetoothActivityEnergyInfoError(BluetoothPowerStatsCollector.java:181)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.lambda$onError$2(BluetoothAdapter.java:1059)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.lambda$executeFromBinder$0(BluetoothUtils.java:343)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.SystemServerInitThreadPool$$ExternalSyntheticLambda0.execute(R8$$SyntheticClass:0)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothUtils.executeFromBinder(BluetoothUtils.java:343)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter$OnBluetoothActivityEnergyInfoProxy.onError(BluetoothAdapter.java:1058)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at android.bluetooth.BluetoothAdapter.requestControllerActivityEnergyInfo(BluetoothAdapter.java:2694)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BatteryStatsImpl$BluetoothStatsRetrieverImpl.requestControllerActivityEnergyInfo(BatteryStatsImpl.java:485)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	at com.android.server.power.stats.BluetoothPowerStatsCollector.collectBluetoothActivityInfo(BluetoothPowerStatsCollector.java:170)
+01-29 14:07:08.327   716   768 E BluetoothPowerStatsCollector: 	... 8 more
+01-29 14:18:17.733   716  1673 E JobScheduler.JobStatus: App com.google.android.inputmethod.latin became active but still in NEVER bucket
+01-29 14:18:17.763   716  1673 E JobScheduler.JobStatus: App com.google.android.inputmethod.latin became active but still in NEVER bucket
+01-29 14:19:07.046   716   956 E ClipboardService: Denying clipboard access to com.android.chrome, application is not in focus nor is it a system service for user 0

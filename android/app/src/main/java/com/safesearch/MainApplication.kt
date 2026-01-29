@@ -15,7 +15,7 @@ class MainApplication : Application(), ReactApplication {
         override fun getPackages(): List<ReactPackage> {
             Log.d("SafeSearch", "getPackages() called")
             
-            // ONLY MainReactPackage - no other packages
+            // DON'T import the SMS package - it will be auto-linked
             return mutableListOf<ReactPackage>(
                 MainReactPackage()
             )
