@@ -1,3 +1,2 @@
-rootProject.name = 'SafeSearch'
-
-include ':app'
+rootProject.name = "SafeSearch"
+include ":app"
