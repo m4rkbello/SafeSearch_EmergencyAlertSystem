@@ -7,6 +7,7 @@ android {
     
     buildFeatures {
         buildConfig true
+        viewBinding true  // Use ViewBinding instead of kotlin-android-extensions
     }
     
     defaultConfig {
@@ -17,7 +18,7 @@ android {
         versionName "1.0"
         
         buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
-        buildConfigField("boolean", "IS_HERMES_ENABLED", "false")
+        buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
         buildConfigField("boolean", "ENABLE_BRIDGELESS_ARCHITECTURE", "false")
     }
     
@@ -34,14 +35,14 @@ android {
         debug {
             signingConfig signingConfigs.debug
             buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
-            buildConfigField("boolean", "IS_HERMES_ENABLED", "false")
+            buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
         }
         release {
             signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", "false")
-            buildConfigField("boolean", "IS_HERMES_ENABLED", "false")
+            buildConfigField("boolean", "IS_HERMES_ENABLED", "true")
         }
     }
     
@@ -52,6 +53,7 @@ android {
     
     kotlinOptions {
         jvmTarget = "17"
+        freeCompilerArgs += ["-Xskip-metadata-version-check"]
     }
 }
 
@@ -59,11 +61,16 @@ dependencies {
     implementation "com.facebook.react:react-android:0.83.1"
     implementation "org.webkit:android-jsc:+"
     
-    // UN-COMMENT this:
-    implementation project(':react-native-get-sms-android')
-    
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20"
+    
     implementation "androidx.core:core-ktx:1.12.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
+    
+    // For React Native
+    implementation "com.facebook.fresco:fresco:3.1.3"
+    implementation "com.facebook.fresco:animated-gif:3.1.3"
+    
     debugImplementation("com.facebook.soloader:soloader:0.10.5")
 }
