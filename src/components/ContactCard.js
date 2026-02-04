@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ContactCard = ({ contact, isSelected, onSelect, onPress, onCall, onEmail }) => {
   return (
+    
     <TouchableOpacity 
       style={[styles.card, isSelected && styles.selectedCard]} 
       onPress={onPress}
